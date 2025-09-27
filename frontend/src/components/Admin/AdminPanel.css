@@ -1,0 +1,192 @@
+.admin-panel {
+  padding: 20px;
+}
+
+.admin-header {
+  margin-bottom: 20px;
+}
+
+.admin-header h2 {
+  color: #2d3748;
+}
+
+.admin-tabs {
+  display: flex;
+  gap: 5px;
+  margin-bottom: 20px;
+  border-bottom: 1px solid #e2e8f0;
+}
+
+.admin-tab {
+  padding: 10px 20px;
+  border: none;
+  background: transparent;
+  border-bottom: 2px solid transparent;
+  cursor: pointer;
+  color: #718096;
+  font-weight: 500;
+  transition: all 0.2s ease;
+}
+
+.admin-tab:hover {
+  color: #4a5568;
+}
+
+.admin-tab.active {
+  color: #3182ce;
+  border-bottom-color: #3182ce;
+}
+
+.admin-content {
+  background: white;
+  border-radius: 8px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  padding: 20px;
+}
+
+.users-table {
+  border: 1px solid #e2e8f0;
+  border-radius: 8px;
+  overflow: hidden;
+}
+
+.table-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr 1fr auto;
+  padding: 15px;
+  border-bottom: 1px solid #e2e8f0;
+}
+
+.table-row.header {
+  background: #f7fafc;
+  font-weight: 600;
+  color: #4a5568;
+}
+
+.table-row:last-child {
+  border-bottom: none;
+}
+
+.role-badge {
+  padding: 4px 8px;
+  border-radius: 12px;
+  font-size: 12px;
+  font-weight: 500;
+  text-transform: capitalize;
+}
+
+.role-badge.admin {
+  background: #e9d8fd;
+  color: #6b46c1;
+}
+
+.role-badge.user {
+  background: #bee3f8;
+  color: #3182ce;
+}
+
+.system-cards {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: 20px;
+}
+
+.system-card {
+  background: #f7fafc;
+  padding: 20px;
+  border-radius: 8px;
+}
+
+.system-card h4 {
+  margin-bottom: 15px;
+  color: #4a5568;
+}
+
+.status {
+  padding: 8px 12px;
+  border-radius: 6px;
+  font-weight: 600;
+  text-align: center;
+}
+
+.status.healthy {
+  background: #c6f6d5;
+  color: #22543d;
+}
+
+.status.unhealthy {
+  background: #fed7d7;
+  color: #742a2a;
+}
+
+.uptime {
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: #2d3748;
+  text-align: center;
+}
+
+.services {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.service {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 8px;
+  background: white;
+  border-radius: 4px;
+}
+
+.service-name {
+  font-weight: 500;
+}
+
+.service-status {
+  padding: 4px 8px;
+  border-radius: 4px;
+  font-size: 12px;
+  font-weight: 600;
+}
+
+.service-status.healthy {
+  background: #c6f6d5;
+  color: #22543d;
+}
+
+.service-status.unhealthy {
+  background: #fed7d7;
+  color: #742a2a;
+}
+
+.logs-content {
+  text-align: center;
+  padding: 40px;
+  color: #718096;
+}
+
+@media (max-width: 768px) {
+  .admin-panel {
+    padding: 10px;
+  }
+  
+  .admin-tabs {
+    overflow-x: auto;
+  }
+  
+  .table-row {
+    grid-template-columns: 1fr;
+    gap: 10px;
+  }
+  
+  .table-row.header {
+    display: none;
+  }
+  
+  .system-cards {
+    grid-template-columns: 1fr;
+  }
+}

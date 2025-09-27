@@ -1,0 +1,97 @@
+2025-09-13 20:20:43 error: Error: Invalid login: 535-5.7.8 Username and Password not accepted. For more information, go to
+535 5.7.8  https://support.google.com/mail/?p=BadCredentials d2e1a72fcca58-77618e200d3sm4761687b3a.17 - gsmtp
+    at SMTPConnection._formatError (C:\Users\Ayush Goel\OneDrive\Desktop\DEPLOYED\STOCKMARKET\backend\node_modules\nodemailer\lib\smtp-connection\index.js:809:19)
+    at SMTPConnection._actionAUTHComplete (C:\Users\Ayush Goel\OneDrive\Desktop\DEPLOYED\STOCKMARKET\backend\node_modules\nodemailer\lib\smtp-connection\index.js:1588:34)
+    at SMTPConnection.<anonymous> (C:\Users\Ayush Goel\OneDrive\Desktop\DEPLOYED\STOCKMARKET\backend\node_modules\nodemailer\lib\smtp-connection\index.js:556:26)
+    at SMTPConnection._processResponse (C:\Users\Ayush Goel\OneDrive\Desktop\DEPLOYED\STOCKMARKET\backend\node_modules\nodemailer\lib\smtp-connection\index.js:993:20)
+    at SMTPConnection._onData (C:\Users\Ayush Goel\OneDrive\Desktop\DEPLOYED\STOCKMARKET\backend\node_modules\nodemailer\lib\smtp-connection\index.js:774:14)
+    at SMTPConnection._onSocketData (C:\Users\Ayush Goel\OneDrive\Desktop\DEPLOYED\STOCKMARKET\backend\node_modules\nodemailer\lib\smtp-connection\index.js:195:44)
+    at TLSSocket.emit (node:events:518:28)
+    at addChunk (node:internal/streams/readable:561:12)
+    at readableAddChunkPushByteMode (node:internal/streams/readable:512:3)
+    at Readable.push (node:internal/streams/readable:392:5)
+2025-09-13 20:20:58 error: Error: Invalid login: 535-5.7.8 Username and Password not accepted. For more information, go to
+535 5.7.8  https://support.google.com/mail/?p=BadCredentials 98e67ed59e1d1-32dd620ab73sm9340294a91.9 - gsmtp
+    at SMTPConnection._formatError (C:\Users\Ayush Goel\OneDrive\Desktop\DEPLOYED\STOCKMARKET\backend\node_modules\nodemailer\lib\smtp-connection\index.js:809:19)
+    at SMTPConnection._actionAUTHComplete (C:\Users\Ayush Goel\OneDrive\Desktop\DEPLOYED\STOCKMARKET\backend\node_modules\nodemailer\lib\smtp-connection\index.js:1588:34)
+    at SMTPConnection.<anonymous> (C:\Users\Ayush Goel\OneDrive\Desktop\DEPLOYED\STOCKMARKET\backend\node_modules\nodemailer\lib\smtp-connection\index.js:556:26)
+    at SMTPConnection._processResponse (C:\Users\Ayush Goel\OneDrive\Desktop\DEPLOYED\STOCKMARKET\backend\node_modules\nodemailer\lib\smtp-connection\index.js:993:20)
+    at SMTPConnection._onData (C:\Users\Ayush Goel\OneDrive\Desktop\DEPLOYED\STOCKMARKET\backend\node_modules\nodemailer\lib\smtp-connection\index.js:774:14)
+    at SMTPConnection._onSocketData (C:\Users\Ayush Goel\OneDrive\Desktop\DEPLOYED\STOCKMARKET\backend\node_modules\nodemailer\lib\smtp-connection\index.js:195:44)
+    at TLSSocket.emit (node:events:518:28)
+    at addChunk (node:internal/streams/readable:561:12)
+    at readableAddChunkPushByteMode (node:internal/streams/readable:512:3)
+    at Readable.push (node:internal/streams/readable:392:5)
+2025-09-13 20:21:00 error: AxiosError: Request failed with status code 401
+    at settle (C:\Users\Ayush Goel\OneDrive\Desktop\DEPLOYED\STOCKMARKET\backend\node_modules\axios\dist\node\axios.cjs:2099:12)
+    at IncomingMessage.handleStreamEnd (C:\Users\Ayush Goel\OneDrive\Desktop\DEPLOYED\STOCKMARKET\backend\node_modules\axios\dist\node\axios.cjs:3307:11)
+    at IncomingMessage.emit (node:events:530:35)
+    at endReadableNT (node:internal/streams/readable:1698:12)
+    at process.processTicksAndRejections (node:internal/process/task_queues:90:21)
+    at Axios.request (C:\Users\Ayush Goel\OneDrive\Desktop\DEPLOYED\STOCKMARKET\backend\node_modules\axios\dist\node\axios.cjs:4483:41)
+    at process.processTicksAndRejections (node:internal/process/task_queues:105:5)
+    at async DataIngestionService.fetchNewsData (C:\Users\Ayush Goel\OneDrive\Desktop\DEPLOYED\STOCKMARKET\backend\src\services\dataIngestion.js:42:24)
+    at async Immediate.runScheduledTasks (C:\Users\Ayush Goel\OneDrive\Desktop\DEPLOYED\STOCKMARKET\backend\src\app.js:81:5)
+2025-09-13 20:22:18 error: Error: Invalid login: 535-5.7.8 Username and Password not accepted. For more information, go to
+535 5.7.8  https://support.google.com/mail/?p=BadCredentials d9443c01a7336-25c3ae29ae2sm79361125ad.120 - gsmtp
+    at SMTPConnection._formatError (C:\Users\Ayush Goel\OneDrive\Desktop\DEPLOYED\STOCKMARKET\backend\node_modules\nodemailer\lib\smtp-connection\index.js:809:19)
+    at SMTPConnection._actionAUTHComplete (C:\Users\Ayush Goel\OneDrive\Desktop\DEPLOYED\STOCKMARKET\backend\node_modules\nodemailer\lib\smtp-connection\index.js:1588:34)
+    at SMTPConnection.<anonymous> (C:\Users\Ayush Goel\OneDrive\Desktop\DEPLOYED\STOCKMARKET\backend\node_modules\nodemailer\lib\smtp-connection\index.js:556:26)
+    at SMTPConnection._processResponse (C:\Users\Ayush Goel\OneDrive\Desktop\DEPLOYED\STOCKMARKET\backend\node_modules\nodemailer\lib\smtp-connection\index.js:993:20)
+    at SMTPConnection._onData (C:\Users\Ayush Goel\OneDrive\Desktop\DEPLOYED\STOCKMARKET\backend\node_modules\nodemailer\lib\smtp-connection\index.js:774:14)
+    at SMTPConnection._onSocketData (C:\Users\Ayush Goel\OneDrive\Desktop\DEPLOYED\STOCKMARKET\backend\node_modules\nodemailer\lib\smtp-connection\index.js:195:44)
+    at TLSSocket.emit (node:events:518:28)
+    at addChunk (node:internal/streams/readable:561:12)
+    at readableAddChunkPushByteMode (node:internal/streams/readable:512:3)
+    at Readable.push (node:internal/streams/readable:392:5)
+2025-09-13 20:22:19 error: AxiosError: Request failed with status code 401
+    at settle (C:\Users\Ayush Goel\OneDrive\Desktop\DEPLOYED\STOCKMARKET\backend\node_modules\axios\dist\node\axios.cjs:2099:12)
+    at IncomingMessage.handleStreamEnd (C:\Users\Ayush Goel\OneDrive\Desktop\DEPLOYED\STOCKMARKET\backend\node_modules\axios\dist\node\axios.cjs:3307:11)
+    at IncomingMessage.emit (node:events:530:35)
+    at endReadableNT (node:internal/streams/readable:1698:12)
+    at process.processTicksAndRejections (node:internal/process/task_queues:90:21)
+    at Axios.request (C:\Users\Ayush Goel\OneDrive\Desktop\DEPLOYED\STOCKMARKET\backend\node_modules\axios\dist\node\axios.cjs:4483:41)
+    at process.processTicksAndRejections (node:internal/process/task_queues:105:5)
+    at async DataIngestionService.fetchNewsData (C:\Users\Ayush Goel\OneDrive\Desktop\DEPLOYED\STOCKMARKET\backend\src\services\dataIngestion.js:42:24)
+    at async Immediate.runScheduledTasks (C:\Users\Ayush Goel\OneDrive\Desktop\DEPLOYED\STOCKMARKET\backend\src\app.js:81:5)
+2025-09-13 21:59:05 error: TypeError: Cannot convert undefined or null to object
+    at Function.entries (<anonymous>)
+    at DataIngestionService.fetchMarketData (C:\Users\Ayush Goel\OneDrive\Desktop\DEPLOYED\STOCKMARKET\backend\src\services\dataIngestion.js:19:46)
+    at process.processTicksAndRejections (node:internal/process/task_queues:105:5)
+    at async Immediate.runScheduledTasks (C:\Users\Ayush Goel\OneDrive\Desktop\DEPLOYED\STOCKMARKET\backend\src\app.js:90:5)
+2025-09-13 21:59:58 error: TypeError: Cannot convert undefined or null to object
+    at Function.entries (<anonymous>)
+    at DataIngestionService.fetchMarketData (C:\Users\Ayush Goel\OneDrive\Desktop\DEPLOYED\STOCKMARKET\backend\src\services\dataIngestion.js:19:46)
+    at process.processTicksAndRejections (node:internal/process/task_queues:105:5)
+    at async Immediate.runScheduledTasks (C:\Users\Ayush Goel\OneDrive\Desktop\DEPLOYED\STOCKMARKET\backend\src\app.js:88:5)
+2025-09-13 22:29:11 error: TypeError: Cannot convert undefined or null to object
+    at Function.entries (<anonymous>)
+    at DataIngestionService.fetchMarketData (C:\Users\Ayush Goel\OneDrive\Desktop\DEPLOYED\STOCKMARKET\backend\src\services\dataIngestion.js:19:46)
+    at process.processTicksAndRejections (node:internal/process/task_queues:105:5)
+    at async Immediate.runScheduledTasks (C:\Users\Ayush Goel\OneDrive\Desktop\DEPLOYED\STOCKMARKET\backend\src\app.js:88:5)
+2025-09-13 22:59:11 error: TypeError: Cannot convert undefined or null to object
+    at Function.entries (<anonymous>)
+    at DataIngestionService.fetchMarketData (C:\Users\Ayush Goel\OneDrive\Desktop\DEPLOYED\STOCKMARKET\backend\src\services\dataIngestion.js:19:46)
+    at process.processTicksAndRejections (node:internal/process/task_queues:105:5)
+    at async Timeout.runScheduledTasks [as _onTimeout] (C:\Users\Ayush Goel\OneDrive\Desktop\DEPLOYED\STOCKMARKET\backend\src\app.js:88:5)
+2025-09-14 13:12:52 error: Error: getaddrinfo ENOTFOUND www.alphavantage.co
+    at AxiosError.from (C:\Users\Ayush Goel\OneDrive\Desktop\DEPLOYED\STOCKMARKET\backend\node_modules\axios\dist\node\axios.cjs:907:14)
+    at RedirectableRequest.handleRequestError (C:\Users\Ayush Goel\OneDrive\Desktop\DEPLOYED\STOCKMARKET\backend\node_modules\axios\dist\node\axios.cjs:3328:25)
+    at RedirectableRequest.emit (node:events:518:28)
+    at eventHandlers.<computed> (C:\Users\Ayush Goel\OneDrive\Desktop\DEPLOYED\STOCKMARKET\backend\node_modules\follow-redirects\index.js:49:24)
+    at ClientRequest.emit (node:events:518:28)
+    at emitErrorEvent (node:_http_client:104:11)
+    at TLSSocket.socketErrorListener (node:_http_client:518:5)
+    at TLSSocket.emit (node:events:518:28)
+    at emitErrorNT (node:internal/streams/destroy:170:8)
+    at emitErrorCloseNT (node:internal/streams/destroy:129:3)
+    at Axios.request (C:\Users\Ayush Goel\OneDrive\Desktop\DEPLOYED\STOCKMARKET\backend\node_modules\axios\dist\node\axios.cjs:4483:41)
+    at process.processTicksAndRejections (node:internal/process/task_queues:105:5)
+    at async DataIngestionService.fetchMarketData (C:\Users\Ayush Goel\OneDrive\Desktop\DEPLOYED\STOCKMARKET\backend\src\services\dataIngestion.js:14:24)
+    at async Immediate.runScheduledTasks (C:\Users\Ayush Goel\OneDrive\Desktop\DEPLOYED\STOCKMARKET\backend\src\app.js:88:5)
+2025-09-14 13:14:36 error: Error: getaddrinfo ENOTFOUND smtp.gmail.com
+    at GetAddrInfoReqWrap.onlookupall [as oncomplete] (node:dns:120:26)
+2025-09-14 13:41:55 error: Failed to fetch market data for AAPL after 3 attempts:
+2025-09-14T10:21:50.681Z [ERROR]: Failed to fetch market data for AAPL after 3 attempts:
+2025-09-14T10:22:27.755Z [ERROR]: Failed to fetch market data for MSFT after 3 attempts:
+2025-09-27T14:57:18.580Z [ERROR]: Failed to fetch market data for AAPL after 3 attempts:
