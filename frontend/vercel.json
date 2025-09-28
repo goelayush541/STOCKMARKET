@@ -1,6 +1,5 @@
 {
   "version": 2,
-  "name": "financial-signals-frontend",
   "builds": [
     {
       "src": "package.json",
@@ -17,6 +16,6 @@
     }
   ],
   "env": {
-    "REACT_APP_API_URL": "https://financial-signals-backend.vercel.app"
+    "REACT_APP_API_URL": "https://stockmarket-olld.vercel.app"
   }
 }

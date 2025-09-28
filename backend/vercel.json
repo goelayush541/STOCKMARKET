@@ -1,6 +1,5 @@
 {
   "version": 2,
-  "name": "financial-signals-backend",
   "builds": [
     {
       "src": "src/app.js",
@@ -10,8 +9,7 @@
   "routes": [
     {
       "src": "/(.*)",
-      "dest": "src/app.js",
-      "methods": ["GET", "POST", "PUT", "DELETE", "OPTIONS"]
+      "dest": "src/app.js"
     }
   ],
   "env": {
