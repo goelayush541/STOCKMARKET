@@ -28,12 +28,12 @@ export const useSignals = (filters = {}) => {
   }, []);
 
   // Memoize the fetch function to prevent unnecessary recreations
-  const fetchSignals = useCallback(async (filters, abortSignal) => {
+  const fetchSignals = useCallback(async (currentFilters, abortSignal) => {
     try {
       setLoading(true);
       setError(null);
       
-      const data = await api.getSignals(filters);
+      const data = await api.getSignals(currentFilters);
       
       // Handle different response formats
       let signalsData = [];
@@ -45,7 +45,9 @@ export const useSignals = (filters = {}) => {
         signalsData = data.pagination.signals;
       }
       
-      setSignals(signalsData);
+      if (!abortSignal?.aborted) {
+        setSignals(signalsData);
+      }
     } catch (err) {
       if (err.name === 'AbortError') {
         console.log('Signal fetch request was aborted');
@@ -53,17 +55,20 @@ export const useSignals = (filters = {}) => {
       }
       
       console.error('Error fetching signals:', err);
-      setError(err.message);
       
-      // Fallback to mock data for specific error types
-      if (err.message.includes('Network error') || 
-          err.message.includes('Failed to fetch') || 
-          err.message.includes('Cannot connect to server')) {
-        const mockSignals = generateMockSignals(filters.limit || 10);
-        setSignals(mockSignals);
-        setError('Using mock data (server unavailable)');
-      } else {
-        setSignals([]);
+      if (!abortSignal?.aborted) {
+        setError(err.message);
+        
+        // Fallback to mock data for specific error types
+        if (err.message.includes('Network error') || 
+            err.message.includes('Failed to fetch') || 
+            err.message.includes('Cannot connect to server')) {
+          const mockSignals = generateMockSignals(currentFilters.limit || 10);
+          setSignals(mockSignals);
+          setError('Using mock data (server unavailable)');
+        } else {
+          setSignals([]);
+        }
       }
     } finally {
       if (!abortSignal?.aborted) {
@@ -89,7 +94,7 @@ export const useSignals = (filters = {}) => {
         abortControllerRef.current.abort();
       }
     };
-  }, [filters, fetchSignals]); // Include fetchSignals in dependencies
+  }, [filters, fetchSignals]);
 
   const refresh = useCallback(async () => {
     // Cancel any ongoing request
@@ -180,6 +185,27 @@ export const useSignals = (filters = {}) => {
     return signals.filter(signal => signal.strength >= minStrength);
   }, [signals]);
 
+  // Function to filter signals by symbol
+  const filterBySymbol = useCallback((symbol) => {
+    return signals.filter(signal => signal.symbol === symbol.toUpperCase());
+  }, [signals]);
+
+  // Function to get active signals (not expired)
+  const getActiveSignals = useCallback(() => {
+    const now = new Date();
+    return signals.filter(signal => 
+      !signal.expiration || new Date(signal.expiration) > now
+    );
+  }, [signals]);
+
+  // Function to get expired signals
+  const getExpiredSignals = useCallback(() => {
+    const now = new Date();
+    return signals.filter(signal => 
+      signal.expiration && new Date(signal.expiration) <= now
+    );
+  }, [signals]);
+
   // Function to get statistics
   const getStats = useCallback(() => {
     const total = signals.length;
@@ -188,6 +214,9 @@ export const useSignals = (filters = {}) => {
     const neutralSignals = signals.filter(s => s.signalType === 'NEUTRAL').length;
     const averageStrength = signals.reduce((sum, s) => sum + s.strength, 0) / total || 0;
     const averageConfidence = signals.reduce((sum, s) => sum + s.confidence, 0) / total || 0;
+    const strongSignals = signals.filter(s => s.strength > 0.7).length;
+    const activeSignals = getActiveSignals().length;
+    const expiredSignals = getExpiredSignals().length;
 
     return {
       total,
@@ -196,21 +225,79 @@ export const useSignals = (filters = {}) => {
       neutralSignals,
       averageStrength: parseFloat(averageStrength.toFixed(2)),
       averageConfidence: parseFloat(averageConfidence.toFixed(2)),
-      strongSignals: signals.filter(s => s.strength > 0.7).length
+      strongSignals,
+      activeSignals,
+      expiredSignals,
+      buyPercentage: total > 0 ? parseFloat((buySignals / total * 100).toFixed(1)) : 0,
+      sellPercentage: total > 0 ? parseFloat((sellSignals / total * 100).toFixed(1)) : 0
     };
+  }, [signals, getActiveSignals, getExpiredSignals]);
+
+  // Function to update a signal
+  const updateSignal = useCallback((signalId, updates) => {
+    setSignals(prev => prev.map(signal => 
+      signal._id === signalId ? { ...signal, ...updates, updatedAt: new Date() } : signal
+    ));
+  }, []);
+
+  // Function to mark signal as read/unread
+  const markSignalAsRead = useCallback((signalId) => {
+    updateSignal(signalId, { isRead: true });
+  }, [updateSignal]);
+
+  const markSignalAsUnread = useCallback((signalId) => {
+    updateSignal(signalId, { isRead: false });
+  }, [updateSignal]);
+
+  // Function to get unread signals count
+  const getUnreadCount = useCallback(() => {
+    return signals.filter(signal => !signal.isRead).length;
+  }, [signals]);
+
+  // Function to export signals as CSV
+  const exportToCSV = useCallback(() => {
+    if (signals.length === 0) return '';
+    
+    const headers = ['Symbol', 'Type', 'Strength', 'Confidence', 'Source', 'Generated At', 'Explanation'];
+    const csvRows = signals.map(signal => [
+      signal.symbol,
+      signal.signalType,
+      signal.strength,
+      signal.confidence,
+      signal.source,
+      new Date(signal.generatedAt).toLocaleString(),
+      `"${signal.explanation.replace(/"/g, '""')}"` // Escape quotes in explanation
+    ]);
+    
+    return [headers, ...csvRows].map(row => row.join(',')).join('\n');
   }, [signals]);
 
   return { 
+    // Core state
     signals, 
     loading, 
     error, 
+    
+    // Core actions
     refresh,
     addSignal,
     removeSignal,
     clearSignals,
+    updateSignal,
+    
+    // Filtering functions
     filterByType,
     filterByStrength,
-    getStats
+    filterBySymbol,
+    getActiveSignals,
+    getExpiredSignals,
+    
+    // Utility functions
+    getStats,
+    markSignalAsRead,
+    markSignalAsUnread,
+    getUnreadCount,
+    exportToCSV
   };
 };
 

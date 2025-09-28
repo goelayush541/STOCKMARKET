@@ -19,7 +19,9 @@ export const useMarketData = (symbol, period = '1d') => {
       setLoading(true);
       setError(null);
       
+      console.log(`Fetching market data for ${symbol}, period: ${period}`);
       const marketData = await api.getMarketData(symbol, period);
+      console.log('Market data received:', marketData);
       
       // Ensure we have a valid array of market data
       if (Array.isArray(marketData) && marketData.length > 0) {
@@ -27,15 +29,17 @@ export const useMarketData = (symbol, period = '1d') => {
         setLastUpdated(new Date());
       } else {
         // If no data returned, use mock data for development
+        console.log('No real data available, using mock data');
         const mockData = generateMockMarketData(symbol, 20);
         setData(mockData);
         setLastUpdated(new Date());
         setError('Using mock data (real data unavailable)');
       }
     } catch (err) {
-      console.error('Error fetching market data:', err);
+      console.error('Error in useMarketData:', err);
       
       // Fallback to mock data on error
+      console.log('API error, falling back to mock data');
       const mockData = generateMockMarketData(symbol, 20);
       setData(mockData);
       setLastUpdated(new Date());
@@ -60,11 +64,12 @@ export const useMarketData = (symbol, period = '1d') => {
     ? data.reduce((sum, item) => sum + item.volume, 0) / data.length 
     : 0;
 
-  // Calculate technical indicators
+  // Calculate technical indicators (only if we have enough data)
   const technicalIndicators = calculateTechnicalIndicators(data);
 
   // Refresh function
   const refresh = async () => {
+    console.log('Refreshing market data...');
     await fetchMarketData();
   };
 
@@ -125,7 +130,9 @@ const calculateTechnicalIndicators = (data) => {
       sma20: 0,
       rsi: 50,
       macd: { value: 0, signal: 0, histogram: 0 },
-      bollingerBands: { upper: 0, middle: 0, lower: 0 }
+      bollingerBands: { upper: 0, middle: 0, lower: 0 },
+      support: 0,
+      resistance: 0
     };
   }
 
@@ -134,62 +141,83 @@ const calculateTechnicalIndicators = (data) => {
     ? data.slice(0, 20).reduce((sum, item) => sum + item.close, 0) / 20
     : data.reduce((sum, item) => sum + item.close, 0) / data.length;
 
-  // RSI Calculation (simplified)
-  const rsi = calculateRSI(data.slice(0, 14));
+  // RSI Calculation
+  const rsi = calculateRSI(data);
 
-  // MACD Calculation (simplified)
+  // MACD Calculation
   const macd = calculateMACD(data);
 
-  // Bollinger Bands (simplified)
+  // Bollinger Bands
   const bollingerBands = calculateBollingerBands(data);
+
+  // Support and Resistance (simplified)
+  const supportResistance = calculateSupportResistance(data);
 
   return {
     sma20: parseFloat(sma20.toFixed(2)),
     rsi: parseFloat(rsi.toFixed(2)),
     macd,
-    bollingerBands
+    bollingerBands,
+    ...supportResistance
   };
 };
 
-// RSI Calculation
-const calculateRSI = (data) => {
-  if (data.length < 2) return 50;
+// RSI Calculation (14-period)
+const calculateRSI = (data, period = 14) => {
+  if (data.length < period + 1) return 50;
 
   let gains = 0;
   let losses = 0;
-  let gainCount = 0;
-  let lossCount = 0;
 
-  for (let i = 1; i < data.length; i++) {
+  // Calculate initial average gains and losses
+  for (let i = 1; i <= period; i++) {
     const change = data[i].close - data[i - 1].close;
     if (change > 0) {
       gains += change;
-      gainCount++;
     } else {
       losses -= change;
-      lossCount++;
     }
   }
 
-  const avgGain = gainCount > 0 ? gains / gainCount : 0;
-  const avgLoss = lossCount > 0 ? losses / lossCount : 0;
+  let avgGain = gains / period;
+  let avgLoss = losses / period;
+
+  // Calculate subsequent values using Wilder's smoothing
+  for (let i = period + 1; i < data.length; i++) {
+    const change = data[i].close - data[i - 1].close;
+    
+    if (change > 0) {
+      avgGain = (avgGain * (period - 1) + change) / period;
+      avgLoss = (avgLoss * (period - 1)) / period;
+    } else {
+      avgGain = (avgGain * (period - 1)) / period;
+      avgLoss = (avgLoss * (period - 1) - change) / period;
+    }
+  }
 
   if (avgLoss === 0) return 100;
+  
   const rs = avgGain / avgLoss;
   return 100 - (100 / (1 + rs));
 };
 
-// MACD Calculation (simplified)
+// MACD Calculation
 const calculateMACD = (data) => {
   if (data.length < 26) {
     return { value: 0, signal: 0, histogram: 0 };
   }
 
-  // Simplified MACD calculation
-  const ema12 = calculateEMA(data.slice(0, 12), 12);
-  const ema26 = calculateEMA(data.slice(0, 26), 26);
+  // Calculate EMAs
+  const ema12 = calculateEMA(data, 12);
+  const ema26 = calculateEMA(data, 26);
   const macdValue = ema12 - ema26;
-  const signal = calculateEMA(data.slice(0, 9).map((_, i) => ({ close: macdValue })), 9); // Simplified signal line
+  
+  // Calculate signal line (EMA of MACD)
+  const macdData = data.map((_, index) => ({ 
+    close: calculateEMA(data.slice(0, index + 1), 12) - calculateEMA(data.slice(0, index + 1), 26) 
+  }));
+  const signal = calculateEMA(macdData.slice(-9), 9);
+  
   const histogram = macdValue - signal;
 
   return {
@@ -202,11 +230,15 @@ const calculateMACD = (data) => {
 // EMA Calculation
 const calculateEMA = (data, period) => {
   if (data.length === 0) return 0;
-  
-  const multiplier = 2 / (period + 1);
-  let ema = data[0].close;
+  if (data.length < period) {
+    // Use SMA if not enough data for EMA
+    return data.reduce((sum, item) => sum + item.close, 0) / data.length;
+  }
 
-  for (let i = 1; i < data.length; i++) {
+  const multiplier = 2 / (period + 1);
+  let ema = data.slice(0, period).reduce((sum, item) => sum + item.close, 0) / period;
+
+  for (let i = period; i < data.length; i++) {
     ema = (data[i].close - ema) * multiplier + ema;
   }
 
@@ -235,6 +267,27 @@ const calculateBollingerBands = (data, period = 20) => {
     upper: parseFloat(upper.toFixed(2)),
     middle: parseFloat(middle.toFixed(2)),
     lower: parseFloat(lower.toFixed(2))
+  };
+};
+
+// Support and Resistance Levels (simplified)
+const calculateSupportResistance = (data) => {
+  if (data.length < 10) {
+    return { support: 0, resistance: 0 };
+  }
+
+  const prices = data.map(item => item.close);
+  const minPrice = Math.min(...prices);
+  const maxPrice = Math.max(...prices);
+  const range = maxPrice - minPrice;
+
+  // Simple support and resistance levels
+  const support = minPrice + range * 0.25; // 25% above lowest
+  const resistance = maxPrice - range * 0.25; // 25% below highest
+
+  return {
+    support: parseFloat(support.toFixed(2)),
+    resistance: parseFloat(resistance.toFixed(2))
   };
 };
 

@@ -4,14 +4,11 @@ class ApiService {
   constructor() {
     this.baseURL = API_BASE_URL;
     this.pendingRequests = new Map();
-    this.requestQueue = [];
-    this.maxConcurrentRequests = 6; // Limit concurrent requests
+    this.maxConcurrentRequests = 6;
     this.activeRequests = 0;
   }
 
   async request(endpoint, options = {}) {
-    // Removed unused requestId variable
-    
     // Check if this is a duplicate request
     if (this.pendingRequests.has(endpoint)) {
       console.warn(`Duplicate request prevented: ${endpoint}`);
@@ -21,7 +18,7 @@ class ApiService {
     // Wait if too many concurrent requests
     if (this.activeRequests >= this.maxConcurrentRequests) {
       await new Promise(resolve => setTimeout(resolve, 100));
-      return this.request(endpoint, options); // Retry
+      return this.request(endpoint, options);
     }
 
     const url = `${this.baseURL}${endpoint}`;
@@ -37,7 +34,7 @@ class ApiService {
     }
     
     const controller = new AbortController();
-    const timeoutId = setTimeout(() => controller.abort(), 15000); // 15 second timeout
+    const timeoutId = setTimeout(() => controller.abort(), 15000);
     
     const config = {
       ...options,
@@ -46,54 +43,55 @@ class ApiService {
     };
     
     this.activeRequests++;
-    this.pendingRequests.set(endpoint, new Promise(() => {})); // Placeholder
+    const requestPromise = (async () => {
+      try {
+        const response = await fetch(url, config);
+        clearTimeout(timeoutId);
+        
+        // Handle HTTP errors
+        if (!response.ok) {
+          if (response.status === 401) {
+            localStorage.removeItem('token');
+            window.location.reload();
+            throw new Error('Authentication failed. Please login again.');
+          }
+          
+          let errorMessage = `HTTP error! status: ${response.status}`;
+          try {
+            const errorData = await response.json();
+            errorMessage = errorData.message || errorData.error || errorMessage;
+          } catch (e) {
+            errorMessage = response.statusText || errorMessage;
+          }
+          
+          throw new Error(errorMessage);
+        }
+        
+        return await response.json();
+        
+      } catch (error) {
+        console.error('API request failed:', error);
+        
+        if (error.name === 'AbortError') {
+          throw new Error('Request timeout - server is not responding');
+        } else if (error.name === 'TypeError' && error.message === 'Failed to fetch') {
+          if (endpoint.includes('/api/signals')) {
+            await new Promise(resolve => setTimeout(resolve, 1000));
+            return this.request(endpoint, options);
+          }
+          throw new Error('Network error - please check your connection');
+        }
+        
+        throw error;
+      } finally {
+        this.activeRequests--;
+        this.pendingRequests.delete(endpoint);
+        clearTimeout(timeoutId);
+      }
+    })();
 
-    try {
-      const response = await fetch(url, config);
-      clearTimeout(timeoutId);
-      
-      // Handle HTTP errors
-      if (!response.ok) {
-        if (response.status === 401) {
-          localStorage.removeItem('token');
-          window.location.reload();
-          throw new Error('Authentication failed. Please login again.');
-        }
-        
-        let errorMessage = `HTTP error! status: ${response.status}`;
-        try {
-          const errorData = await response.json();
-          errorMessage = errorData.message || errorData.error || errorMessage;
-        } catch (e) {
-          errorMessage = response.statusText || errorMessage;
-        }
-        
-        throw new Error(errorMessage);
-      }
-      
-      const data = await response.json();
-      return data;
-      
-    } catch (error) {
-      console.error('API request failed:', error);
-      
-      if (error.name === 'AbortError') {
-        throw new Error('Request timeout - server is not responding');
-      } else if (error.name === 'TypeError' && error.message === 'Failed to fetch') {
-        // Handle resource errors with retry logic
-        if (endpoint.includes('/api/signals')) {
-          await new Promise(resolve => setTimeout(resolve, 1000)); // Wait 1 second
-          return this.request(endpoint, options); // Retry once
-        }
-        throw new Error('Network error - please check your connection');
-      }
-      
-      throw error;
-    } finally {
-      this.activeRequests--;
-      this.pendingRequests.delete(endpoint);
-      clearTimeout(timeoutId);
-    }
+    this.pendingRequests.set(endpoint, requestPromise);
+    return requestPromise;
   }
 
   // Auth endpoints
@@ -127,7 +125,6 @@ class ApiService {
       return await this.request('/api/user/profile');
     } catch (error) {
       console.error('Failed to get user profile:', error);
-      // Return mock data for development
       return {
         user: {
           firstName: 'John',
@@ -155,15 +152,14 @@ class ApiService {
     const cacheKey = `signals-${JSON.stringify(params)}`;
     const cache = sessionStorage.getItem(cacheKey);
     
-    // Return cached data if available and not too old
     if (cache) {
       try {
         const { data, timestamp } = JSON.parse(cache);
-        if (Date.now() - timestamp < 30000) { // 30 second cache
+        if (Date.now() - timestamp < 30000) {
           return data;
         }
       } catch (e) {
-        // Cache is invalid, continue with fresh request
+        // Cache is invalid
       }
     }
     
@@ -180,7 +176,6 @@ class ApiService {
         signals = response.signals || [];
       }
       
-      // Cache the response
       sessionStorage.setItem(cacheKey, JSON.stringify({
         data: signals,
         timestamp: Date.now()
@@ -190,7 +185,6 @@ class ApiService {
     } catch (error) {
       console.error('Failed to get signals:', error);
       
-      // Try to return cached data as fallback
       if (cache) {
         try {
           const { data } = JSON.parse(cache);
@@ -200,7 +194,7 @@ class ApiService {
         }
       }
       
-      return []; // Return empty array on error
+      return [];
     }
   }
 
@@ -221,7 +215,7 @@ class ApiService {
     if (cache) {
       try {
         const { data, timestamp } = JSON.parse(cache);
-        if (Date.now() - timestamp < 60000) { // 1 minute cache for news
+        if (Date.now() - timestamp < 60000) {
           return data;
         }
       } catch (e) {
@@ -264,7 +258,7 @@ class ApiService {
     }
   }
 
-  // Market data endpoints with caching
+  // Market data endpoints with caching and fallback
   async getMarketData(symbol, period = '1d') {
     const cacheKey = `market-data-${symbol}-${period}`;
     const cache = sessionStorage.getItem(cacheKey);
@@ -272,7 +266,7 @@ class ApiService {
     if (cache) {
       try {
         const { data, timestamp } = JSON.parse(cache);
-        if (Date.now() - timestamp < 60000) { // 1 minute cache for market data
+        if (Date.now() - timestamp < 60000) {
           return data;
         }
       } catch (e) {
@@ -282,14 +276,23 @@ class ApiService {
     
     try {
       const response = await this.request(`/api/market-data/${symbol}?period=${period}`);
-      const data = Array.isArray(response) ? response : [];
+      
+      let marketData = [];
+      if (Array.isArray(response)) {
+        marketData = response;
+      } else if (response && Array.isArray(response.data)) {
+        marketData = response.data;
+      } else {
+        console.warn('Unexpected market data format:', response);
+        marketData = [];
+      }
       
       sessionStorage.setItem(cacheKey, JSON.stringify({
-        data,
+        data: marketData,
         timestamp: Date.now()
       }));
       
-      return data;
+      return marketData;
     } catch (error) {
       console.error('Failed to get market data:', error);
       
@@ -302,8 +305,40 @@ class ApiService {
         }
       }
       
-      return [];
+      // Return mock data for development
+      return this.generateMockMarketData(symbol, 20);
     }
+  }
+
+  // Generate mock market data for fallback
+  generateMockMarketData(symbol, count = 20) {
+    const basePrice = 100 + Math.random() * 500;
+    let currentPrice = basePrice;
+    const data = [];
+
+    for (let i = 0; i < count; i++) {
+      const priceChange = (Math.random() - 0.5) * 10;
+      currentPrice = Math.max(0.01, currentPrice + priceChange);
+      const volume = 1000000 + Math.random() * 9000000;
+      
+      const open = currentPrice - Math.random() * 2;
+      const high = Math.max(currentPrice, open) + Math.random() * 3;
+      const low = Math.min(currentPrice, open) - Math.random() * 3;
+      const close = currentPrice;
+
+      data.push({
+        symbol: symbol.toUpperCase(),
+        timestamp: new Date(Date.now() - i * 5 * 60 * 1000),
+        open: parseFloat(open.toFixed(2)),
+        high: parseFloat(high.toFixed(2)),
+        low: parseFloat(low.toFixed(2)),
+        close: parseFloat(close.toFixed(2)),
+        volume: Math.floor(volume),
+        source: 'mock'
+      });
+    }
+
+    return data.reverse();
   }
 
   // Backtesting endpoints
@@ -315,7 +350,7 @@ class ApiService {
       });
     } catch (error) {
       console.error('Failed to run backtest:', error);
-      throw error; // Re-throw for the component to handle
+      throw error;
     }
   }
 
@@ -334,7 +369,6 @@ class ApiService {
       return await this.request('/api/portfolio');
     } catch (error) {
       console.error('Failed to get portfolio:', error);
-      // Return mock portfolio for development
       return {
         balance: 100000,
         initialBalance: 100000,
@@ -361,7 +395,7 @@ class ApiService {
     }
   }
 
-  // Admin endpoints (only for admin users)
+  // Admin endpoints
   async getSystemHealth() {
     try {
       return await this.request('/api/admin/health');
@@ -405,24 +439,36 @@ class ApiService {
     }
   }
 
-  // Utility method to check if user is authenticated
+  // Utility methods
   isAuthenticated() {
     return !!localStorage.getItem('token');
   }
 
-  // Utility method to get token
   getToken() {
     return localStorage.getItem('token');
   }
 
-  // Utility method to set token
   setToken(token) {
     localStorage.setItem('token', token);
   }
 
-  // Utility method to remove token
   removeToken() {
     localStorage.removeItem('token');
+  }
+
+  // Cache management
+  clearCache() {
+    Object.keys(sessionStorage).forEach(key => {
+      if (key.startsWith('signals-') || key.startsWith('news-') || key.startsWith('market-data-')) {
+        sessionStorage.removeItem(key);
+      }
+    });
+  }
+
+  // Request management
+  cancelAllRequests() {
+    this.pendingRequests.clear();
+    this.activeRequests = 0;
   }
 }
 
