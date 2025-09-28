@@ -30337,3 +30337,13 @@
 2025-09-28T08:36:13.521Z [INFO]: GET /api/market-data/AAPL
 2025-09-28T08:36:26.591Z [INFO]: GET /api/signals
 2025-09-28T08:36:30.811Z [INFO]: GET /api/portfolio
+2025-09-28T09:04:37.616Z [INFO]: Server running on port 5000
+2025-09-28T09:04:37.618Z [INFO]: Local: http://localhost:5000
+2025-09-28T09:04:37.618Z [INFO]: Network: http://0.0.0.0:5000
+2025-09-28T09:04:37.619Z [INFO]: Health check: http://localhost:5000/health
+2025-09-28T09:04:37.619Z [INFO]: API test: http://localhost:5000/api/test
+2025-09-28T09:04:37.632Z [INFO]: Connected to MongoDB successfully
+2025-09-28T09:04:40.614Z [INFO]: Starting background data ingestion...
+2025-09-28T09:04:40.633Z [INFO]: Fetching news data for query: stock market
+2025-09-28T09:04:40.732Z [INFO]: Successfully saved 8 news articles
+2025-09-28T09:04:40.734Z [INFO]: Fetching market data for AAPL (attempt 1)
