@@ -1,15 +1,17 @@
 {
   "version": 2,
+  "name": "financial-signals-backend",
   "builds": [
     {
-      "src": "package.json",
+      "src": "src/app.js",
       "use": "@vercel/node"
     }
   ],
   "routes": [
     {
       "src": "/(.*)",
-      "dest": "/server.js"
+      "dest": "src/app.js",
+      "methods": ["GET", "POST", "PUT", "DELETE", "OPTIONS"]
     }
   ],
   "env": {

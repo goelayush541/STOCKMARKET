@@ -1,5 +1,6 @@
 {
   "version": 2,
+  "name": "financial-signals-frontend",
   "builds": [
     {
       "src": "package.json",
@@ -11,24 +12,11 @@
   ],
   "routes": [
     {
-      "src": "/static/(.*)",
-      "dest": "/static/$1"
-    },
-    {
-      "src": "/favicon.ico",
-      "dest": "/favicon.ico"
-    },
-    {
-      "src": "/manifest.json",
-      "dest": "/manifest.json"
-    },
-    {
       "src": "/(.*)",
       "dest": "/index.html"
     }
   ],
   "env": {
-    "REACT_APP_API_URL": "http://localhost:5000",
-    "REACT_APP_WS_URL": "ws://localhost:5000"
+    "REACT_APP_API_URL": "https://financial-signals-backend.vercel.app"
   }
 }
