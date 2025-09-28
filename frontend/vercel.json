@@ -19,5 +19,5 @@
     "REACT_APP_API_URL": "https://stockmarket-olld.vercel.app"
   },
   "installCommand": "cd frontend && npm install",
-  "buildCommand": "cd frontend && npm run build"
+  "buildCommand": "cd frontend && npm start"
 }
