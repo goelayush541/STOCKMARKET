@@ -30347,3 +30347,85 @@
 2025-09-28T09:04:40.633Z [INFO]: Fetching news data for query: stock market
 2025-09-28T09:04:40.732Z [INFO]: Successfully saved 8 news articles
 2025-09-28T09:04:40.734Z [INFO]: Fetching market data for AAPL (attempt 1)
+2025-09-28T10:07:09.767Z [INFO]: 🚀 Server running on port 5000
+2025-09-28T10:07:09.769Z [INFO]: 📍 Environment: production
+2025-09-28T10:07:09.769Z [INFO]: 🔗 Local: http://localhost:5000
+2025-09-28T10:07:09.769Z [INFO]: 🌐 Network: http://0.0.0.0:5000
+2025-09-28T10:07:09.769Z [INFO]: ❤️ Health check: http://localhost:5000/health
+2025-09-28T10:07:09.770Z [INFO]: 🧪 API test: http://localhost:5000/api/test
+2025-09-28T10:07:09.779Z [INFO]: Connected to MongoDB successfully
+2025-09-28T10:07:19.769Z [INFO]: 🚀 Starting production data ingestion...
+2025-09-28T10:07:19.770Z [INFO]: Fetching news data for query: stock market
+2025-09-28T10:07:19.801Z [INFO]: Successfully saved 7 news articles
+2025-09-28T10:07:19.801Z [INFO]: ✅ News data ingestion completed
+2025-09-28T10:07:19.801Z [INFO]: Fetching market data for AAPL (attempt 1)
+2025-09-28T10:07:21.050Z [INFO]: Successfully saved 100 market data entries for AAPL
+2025-09-28T10:07:24.053Z [INFO]: ✅ Market data fetched for AAPL
+2025-09-28T10:07:24.053Z [INFO]: Fetching market data for MSFT (attempt 1)
+2025-09-28T10:07:24.758Z [INFO]: Successfully saved 100 market data entries for MSFT
+2025-09-28T10:07:27.767Z [INFO]: ✅ Market data fetched for MSFT
+2025-09-28T10:07:27.768Z [INFO]: Fetching market data for GOOGL (attempt 1)
+2025-09-28T10:07:28.608Z [INFO]: Successfully saved 100 market data entries for GOOGL
+2025-09-28T10:07:31.614Z [INFO]: ✅ Market data fetched for GOOGL
+2025-09-28T10:07:31.614Z [INFO]: 🎉 Production data ingestion completed
+2025-09-28T10:07:33.250Z [INFO]: GET /api/auth/verify 304 11ms
+2025-09-28T10:07:33.253Z [INFO]: GET /api/auth/verify 304 2ms
+2025-09-28T10:07:33.265Z [INFO]: GET /api/signals?limit=20 200 4ms
+2025-09-28T10:07:33.266Z [INFO]: GET /api/user/profile 304 8ms
+2025-09-28T10:07:33.271Z [INFO]: GET /api/news?limit=10 200 4ms
+2025-09-28T10:07:33.277Z [INFO]: GET /api/portfolio 304 9ms
+2025-09-28T10:07:36.748Z [INFO]: GET /api/signals?limit=10 200 8ms
+2025-09-28T10:07:36.753Z [INFO]: GET /api/market-data/AAPL?period=1d 200 11ms
+2025-09-28T10:07:37.915Z [WARN]: MongoDB disconnected
+2025-09-28T10:08:26.181Z [WARN]: Response timeout: GET /verify
+2025-09-28T10:08:26.197Z [ERROR]: Token verification error: connect ECONNREFUSED ::1:27017, connect ECONNREFUSED 127.0.0.1:27017
+2025-09-28T10:08:26.199Z [INFO]: GET /api/auth/verify 401 30022ms
+2025-09-28T10:08:37.103Z [WARN]: Response timeout: POST /login
+2025-09-28T10:08:37.113Z [ERROR]: Login error: connect ECONNREFUSED ::1:27017, connect ECONNREFUSED 127.0.0.1:27017
+2025-09-28T10:08:37.121Z [INFO]: POST /api/auth/login 500 30021ms
+2025-09-28T10:08:46.182Z [ERROR]: Token verification error: connect ECONNREFUSED ::1:27017, connect ECONNREFUSED 127.0.0.1:27017
+2025-09-28T10:09:40.161Z [WARN]: Response timeout: POST /login
+2025-09-28T10:09:40.161Z [ERROR]: Login error: connect ECONNREFUSED ::1:27017, connect ECONNREFUSED 127.0.0.1:27017
+2025-09-28T10:09:40.162Z [INFO]: POST /api/auth/login 500 30004ms
+2025-09-28T10:11:35.666Z [INFO]: 🚀 Server running on port 5000
+2025-09-28T10:11:35.668Z [INFO]: 📍 Environment: production
+2025-09-28T10:11:35.668Z [INFO]: 🔗 Local: http://localhost:5000
+2025-09-28T10:11:35.668Z [INFO]: 🌐 Network: http://0.0.0.0:5000
+2025-09-28T10:11:35.668Z [INFO]: ❤️ Health check: http://localhost:5000/health
+2025-09-28T10:11:35.669Z [INFO]: 🧪 API test: http://localhost:5000/api/test
+2025-09-28T10:11:45.676Z [INFO]: 🚀 Starting production data ingestion...
+2025-09-28T10:11:45.678Z [INFO]: Fetching news data for query: stock market
+2025-09-28T10:11:55.733Z [ERROR]: Error fetching news data: Operation `newsdatas.insertMany()` buffering timed out after 10000ms
+2025-09-28T10:12:05.633Z [ERROR]: MongoDB connection error: connect ECONNREFUSED ::1:27017, connect ECONNREFUSED 127.0.0.1:27017
+2025-09-28T10:15:48.876Z [INFO]: 🚀 Server running on port 5000
+2025-09-28T10:15:48.883Z [INFO]: 📍 Environment: production
+2025-09-28T10:15:48.883Z [INFO]: 🔗 Local: http://localhost:5000
+2025-09-28T10:15:48.884Z [INFO]: 🌐 Network: http://0.0.0.0:5000
+2025-09-28T10:15:48.884Z [INFO]: ❤️ Health check: http://localhost:5000/health
+2025-09-28T10:15:48.884Z [INFO]: 🧪 API test: http://localhost:5000/api/test
+2025-09-28T10:15:50.287Z [INFO]: Connected to MongoDB successfully
+2025-09-28T10:15:58.872Z [INFO]: 🚀 Starting production data ingestion...
+2025-09-28T10:15:58.873Z [INFO]: Fetching news data for query: stock market
+2025-09-28T10:15:59.087Z [INFO]: Successfully saved 13 news articles
+2025-09-28T10:15:59.088Z [INFO]: ✅ News data ingestion completed
+2025-09-28T10:15:59.089Z [INFO]: Fetching market data for AAPL (attempt 1)
+2025-09-28T10:16:00.938Z [INFO]: Successfully saved 100 market data entries for AAPL
+2025-09-28T10:16:03.948Z [INFO]: ✅ Market data fetched for AAPL
+2025-09-28T10:16:03.948Z [INFO]: Fetching market data for MSFT (attempt 1)
+2025-09-28T10:16:04.834Z [INFO]: Successfully saved 100 market data entries for MSFT
+2025-09-28T10:16:07.838Z [INFO]: ✅ Market data fetched for MSFT
+2025-09-28T10:16:07.838Z [INFO]: Fetching market data for GOOGL (attempt 1)
+2025-09-28T10:16:08.709Z [INFO]: Successfully saved 100 market data entries for GOOGL
+2025-09-28T10:16:11.711Z [INFO]: ✅ Market data fetched for GOOGL
+2025-09-28T10:16:11.711Z [INFO]: 🎉 Production data ingestion completed
+2025-09-28T10:16:26.973Z [INFO]: POST /api/auth/login 401 123ms
+2025-09-28T10:17:38.929Z [INFO]: POST /api/auth/register 201 548ms
+2025-09-28T10:17:39.180Z [INFO]: GET /api/user/profile 200 239ms
+2025-09-28T10:17:39.269Z [INFO]: GET /api/signals?limit=20 200 88ms
+2025-09-28T10:17:39.331Z [INFO]: GET /api/news?limit=10 200 93ms
+2025-09-28T10:17:39.515Z [INFO]: GET /api/portfolio 200 274ms
+2025-09-28T10:17:43.336Z [INFO]: GET /api/market-data/AAPL?period=1d 200 105ms
+2025-09-28T10:17:43.346Z [INFO]: GET /api/signals?limit=10 200 119ms
+2025-09-28T10:17:47.543Z [INFO]: GET /api/signals?symbol=&signalType=&minStrength=0 200 97ms
+2025-09-28T10:17:53.915Z [INFO]: POST /api/backtest 200 91ms
+2025-09-28T10:18:02.644Z [INFO]: GET /api/portfolio 200 202ms

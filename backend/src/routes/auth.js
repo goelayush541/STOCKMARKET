@@ -5,13 +5,15 @@ const logger = require('../utils/logger');
 
 const router = express.Router();
 
-// JWT secret key
-const JWT_SECRET = process.env.JWT_SECRET || 'your-secret-key-change-in-production';
+// JWT configuration
+const JWT_SECRET = process.env.JWT_SECRET || 'fallback-secret-key-for-development-only';
 const JWT_EXPIRES_IN = process.env.JWT_EXPIRES_IN || '7d';
 
 // Register new user
 router.post('/register', async (req, res) => {
   try {
+    console.log('Registration attempt:', req.body);
+    
     const { email, password, firstName, lastName } = req.body;
 
     // Validation
@@ -40,6 +42,7 @@ router.post('/register', async (req, res) => {
     });
 
     await user.save();
+    console.log('User created successfully:', user.email);
 
     // Generate JWT token
     const token = jwt.sign(
@@ -65,10 +68,11 @@ router.post('/register', async (req, res) => {
     });
 
   } catch (error) {
-    logger.error('Registration error:', error);
+    console.error('Registration error:', error);
     res.status(500).json({
       error: 'Internal server error',
-      message: 'Could not create user'
+      message: 'Could not create user',
+      details: process.env.NODE_ENV === 'development' ? error.message : undefined
     });
   }
 });
@@ -76,6 +80,8 @@ router.post('/register', async (req, res) => {
 // Login user
 router.post('/login', async (req, res) => {
   try {
+    console.log('Login attempt:', { email: req.body.email });
+    
     const { email, password } = req.body;
 
     // Validation
@@ -89,6 +95,7 @@ router.post('/login', async (req, res) => {
     // Find user by email
     const user = await User.findOne({ email });
     if (!user) {
+      console.log('User not found:', email);
       return res.status(401).json({
         error: 'Invalid credentials',
         message: 'Invalid email or password'
@@ -98,6 +105,7 @@ router.post('/login', async (req, res) => {
     // Check password
     const isPasswordValid = await user.comparePassword(password);
     if (!isPasswordValid) {
+      console.log('Invalid password for user:', email);
       return res.status(401).json({
         error: 'Invalid credentials',
         message: 'Invalid email or password'
@@ -120,6 +128,8 @@ router.post('/login', async (req, res) => {
       { expiresIn: JWT_EXPIRES_IN }
     );
 
+    console.log('Login successful for user:', email);
+
     res.json({
       message: 'Login successful',
       user: {
@@ -133,10 +143,11 @@ router.post('/login', async (req, res) => {
     });
 
   } catch (error) {
-    logger.error('Login error:', error);
+    console.error('Login error:', error);
     res.status(500).json({
       error: 'Internal server error',
-      message: 'Could not login'
+      message: 'Could not login',
+      details: process.env.NODE_ENV === 'development' ? error.message : undefined
     });
   }
 });
@@ -176,7 +187,7 @@ router.get('/verify', async (req, res) => {
     });
 
   } catch (error) {
-    logger.error('Token verification error:', error);
+    console.error('Token verification error:', error);
     res.status(401).json({
       error: 'Invalid token',
       message: 'Token verification failed'
@@ -184,7 +195,7 @@ router.get('/verify', async (req, res) => {
   }
 });
 
-// Logout user (client-side token removal)
+// Logout user
 router.post('/logout', (req, res) => {
   res.json({ message: 'Logout successful' });
 });
